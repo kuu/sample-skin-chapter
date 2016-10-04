@@ -598,6 +598,7 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
       this.skin.updatePlayhead(this.state.duration, this.state.duration, this.state.duration);
       this.state.playerState = CONSTANTS.STATE.END;
       this.renderSkin();
+      this.skin.props.skinConfig.chapters = [];
     },
 
     onVcPlayed: function(event, source) {

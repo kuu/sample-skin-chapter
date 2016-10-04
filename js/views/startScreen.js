@@ -7,6 +7,7 @@ var React = require('react'),
     CONSTANTS = require('../constants/constants'),
     Spinner = require('../components/spinner'),
     Icon = require('../components/icon'),
+    ChapterCarousel = require('../components/chapterCarousel'),
     ResizeMixin = require('../mixins/resizeMixin'),
     Utils = require('../components/utils');
 
@@ -35,6 +36,13 @@ var StartScreen = React.createClass({
   handleClick: function(event) {
     event.preventDefault();
     this.props.controller.togglePlayPause();
+    this.props.controller.state.accessibilityControlsEnabled = true;
+    this.setState({playButtonClicked: true});
+  },
+
+  handleChapterClick: function(offset) {
+    this.props.controller.togglePlayPause();
+    this.props.controller.seek(offset / 1000);
     this.props.controller.state.accessibilityControlsEnabled = true;
     this.setState({playButtonClicked: true});
   },
@@ -90,11 +98,50 @@ var StartScreen = React.createClass({
     var iconName = (this.props.controller.state.playerState == CONSTANTS.STATE.END ? "replay" : "play");
     var descriptionMetadata = (<div className={descriptionClass} ref="description" style={descriptionStyle}>{this.state.descriptionText}</div>);
 
+    var chapters = this.props.skinConfig.chapters;
+    var thumbnailData = {};
+    var timeSlices = [];
+    var thumbnails;
+
+    if (chapters && chapters.length) {
+      chapters.forEach(function (chapter) {
+        timeSlices.push(chapter.time);
+        thumbnailData[chapter.time] = {
+          "200": {
+            url: chapter.url,
+            title: chapter.title,
+            time: chapter.time,
+            width: 200,
+            height: 200 * chapter.height / chapter.width
+          }
+        };
+      });
+
+      thumbnails = {
+        data: {
+          available_time_slices: timeSlices,
+          available_widths: [200],
+          thumbnails: thumbnailData
+        }
+      };
+    }
+
     var actionIcon = (
-      <a className={actionIconClass} onClick={this.handleClick}>
-        <Icon {...this.props} icon={iconName} style={actionIconStyle}/>
-      </a>
+      <div>
+        <a className={actionIconClass} onClick={this.handleClick}>
+          <Icon {...this.props} icon={iconName} style={actionIconStyle}/>
+        </a>
+        {!thumbnails ? null :
+          <ChapterCarousel
+            thumbnails={thumbnails}
+            duration={120000}
+            hoverTime={60000}
+            scrubberBarWidth={this.props.componentWidth}
+            playStartCallback={this.handleChapterClick} />
+        }
+      </div>
     );
+
     return (
       <div className="oo-state-screen oo-start-screen">
         <div className={stateScreenPosterClass} style={posterStyle}>

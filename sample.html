@@ -5,6 +5,7 @@
   <script src="//player.ooyala.com/static/v4/stable/4.6.9/video-plugin/main_html5.min.js"></script>
   <script src="//player.ooyala.com/static/v4/stable/4.6.9/video-plugin/osmf_flash.min.js"></script>
   <script src="//player.ooyala.com/static/v4/stable/4.6.9/video-plugin/bit_wrapper.min.js"></script>
+  <script src="//player.ooyala.com/static/v4/stable/4.6.9//other-plugin/discovery_api.min.js"></script>
   <script src="build/html5-skin.min.js"></script>
   <link rel="stylesheet" href="build/html5-skin.min.css" />
 </head>
@@ -14,10 +15,38 @@
 <script>
   var playerParam = {
     "pcode": "BtbmUyOlamRiH-S0S-iUeNvf_ghr",
-    "playerBrandingId": "7267438d470c471eb75a165a8b670617",
+    "playerBrandingId": "4cbcdcac8a1242edb3e51917038012ca",
     'debug':true,
     "skin": {
-      "config": "skin.json"
+      "config": "skin.json",
+      "inline": {
+        chapters: [
+          {
+            "time":0,
+            "url":"http://ak.c.ooyala.com/JubnQ4MzE6qU3iWkhWaU-rXYir7bBz5n/Ut_HKthATH4eww8X4xMDoxOjA4MTsiGN",
+            "url_ssl":"https://secure-cf-c.ooyala.com/JubnQ4MzE6qU3iWkhWaU-rXYir7bBz5n/Ut_HKthATH4eww8X4xMDoxOjA4MTsiGN",
+            "height":692,
+            "width":1280,
+            "title":"チャプター１"
+          },
+          {
+            "time":30000,
+            "url":"http://ak.c.ooyala.com/JubnQ4MzE6qU3iWkhWaU-rXYir7bBz5n/QCdjB5HwFOTaWQ8X4xMDoxOjA4MTsiGN",
+            "url_ssl":"https://secure-cf-c.ooyala.com/JubnQ4MzE6qU3iWkhWaU-rXYir7bBz5n/QCdjB5HwFOTaWQ8X4xMDoxOjA4MTsiGN",
+            "height":692,
+            "width":1280,
+            "title":"チャプター２"
+          },
+          {
+            "time":60000,
+            "url":"http://ak.c.ooyala.com/JubnQ4MzE6qU3iWkhWaU-rXYir7bBz5n/PE3O6Z9ojHeNSk7H4xMDoxOjA4MTsiGN",
+            "url_ssl":"https://secure-cf-c.ooyala.com/JubnQ4MzE6qU3iWkhWaU-rXYir7bBz5n/PE3O6Z9ojHeNSk7H4xMDoxOjA4MTsiGN",
+            "height":692,
+            "width":1280,
+            "title":"チャプター３"
+          }
+        ]
+      }
     }
   };
   OO.ready(function() {

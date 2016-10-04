@@ -8,6 +8,7 @@ var React = require('react'),
     AdOverlay = require('../components/adOverlay'),
     UpNextPanel = require('../components/upNextPanel'),
     TextTrack = require('../components/textTrackPanel'),
+    ChapterCarousel = require('../components/chapterCarousel'),
     ResizeMixin = require('../mixins/resizeMixin'),
     Icon = require('../components/icon'),
     Utils = require('../components/utils'),
@@ -42,6 +43,12 @@ var PauseScreen = React.createClass({
   handleClick: function(event) {
     event.preventDefault();
     this.props.controller.togglePlayPause();
+    this.props.controller.state.accessibilityControlsEnabled = true;
+  },
+
+  handleChapterClick: function(offset) {
+    this.props.controller.togglePlayPause();
+    this.props.controller.seek(offset / 1000);
     this.props.controller.state.accessibilityControlsEnabled = true;
   },
 
@@ -104,6 +111,43 @@ var PauseScreen = React.createClass({
         controlBarVisible={this.state.controlBarVisible}
         currentPlayhead={this.props.currentPlayhead}/> : null;
 
+    var chapters = this.props.skinConfig.chapters;
+    var thumbnailData = {};
+    var timeSlices = [];
+    var thumbnails;
+
+    if (chapters && chapters.length) {
+      chapters.forEach(function (chapter) {
+        timeSlices.push(chapter.time);
+        thumbnailData[chapter.time] = {
+          "200": {
+            url: chapter.url,
+            title: chapter.title,
+            time: chapter.time,
+            width: 200,
+            height: 200 * chapter.height / chapter.width
+          }
+        };
+      });
+
+      thumbnails = {
+        data: {
+          available_time_slices: timeSlices,
+          available_widths: [200],
+          thumbnails: thumbnailData
+        }
+      };
+    }
+
+    var chapterCarousel = !thumbnails ? null :
+      <ChapterCarousel
+        pausing={true}
+        thumbnails={thumbnails}
+        duration={120000}
+        hoverTime={60000}
+        scrubberBarWidth={this.props.componentWidth}
+        playStartCallback={this.handleChapterClick} />;
+
     return (
       <div className="oo-state-screen oo-pause-screen">
         <div className={fadeUnderlayClass}></div>
@@ -117,6 +161,8 @@ var PauseScreen = React.createClass({
         <a className={actionIconClass} onClick={this.handleClick}>
           <Icon {...this.props} icon="pause" style={actionIconStyle}/>
         </a>
+
+        {chapterCarousel}
 
         <div className="oo-interactive-container">
           {this.props.closedCaptionOptions.enabled ?
